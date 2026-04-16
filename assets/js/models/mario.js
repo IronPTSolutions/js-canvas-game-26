@@ -11,6 +11,10 @@ class Mario {
     this.w = 30;
 
     this.vx = 0;
+    this.vy = 0;
+    this.ay = 0;
+
+    this.isJumping = false;
   }
 
   groundTo(groundY) {
@@ -36,11 +40,28 @@ class Mario {
           this.vx = 0;
         }
         break;
+      case KEY_UP:
+        if (!this.isJumping) {
+          this.isJumping = true;
+          this.vy = -MARIO_VY;
+          this.ay = MARIO_AY;
+        }
+        break;
     }
   }
 
   move() {
+    this.vy += this.ay;
+
     this.x += this.vx;
+    this.y += this.vy;
+
+    if (this.y > this.ground) {
+      this.y = this.ground;
+      this.vy = 0;
+      this.ay = 0;
+      this.isJumping = false;
+    }
   }
 
   draw() {

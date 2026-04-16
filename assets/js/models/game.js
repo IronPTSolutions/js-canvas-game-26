@@ -40,6 +40,17 @@ class Game {
 
   move() {
     this.mario.move();
+
+    this.checkBounds();
+  }
+
+  checkBounds() {
+    if (this.mario.x < 0) {
+      this.mario.x = 0;
+    }
+    if (this.mario.x + this.mario.w > this.canvas.width) {
+      this.mario.x = this.canvas.width - this.mario.w;
+    }
   }
 
   draw() {
