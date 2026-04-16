@@ -10,6 +10,8 @@ const KEY_UP = 38;
 const MARIO_VX = 5;
 const MARIO_VY = 10;
 const MARIO_AY = 0.3;
+const MARIO_H = 42;
+const MARIO_W = 30;
 
 const BG_VX = 3;
 

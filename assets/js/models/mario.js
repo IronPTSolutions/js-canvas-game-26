@@ -7,14 +7,28 @@ class Mario {
     this.y = y;
     this.ground = 0;
 
-    this.h = 30;
-    this.w = 30;
+    this.h = MARIO_H;
+    this.w = MARIO_W;
 
     this.vx = 0;
     this.vy = 0;
     this.ay = 0;
 
     this.isJumping = false;
+
+    this.sprite = new Image();
+    this.sprite.src = '/assets/images/sprites/sprite-mario.png';
+    this.sprite.vFrames = 2;
+    this.sprite.hFrames = 2;
+    this.sprite.vFrameIndex = 0;
+    this.sprite.hFrameIndex = 1;
+    this.sprite.onload = () => {
+      this.sprite.isReady = true;
+      this.sprite.frameW = Math.floor(this.sprite.width / this.sprite.vFrames);
+      this.sprite.frameH = Math.floor(this.sprite.height / this.sprite.hFrames);
+    }
+
+    this.drawCount = 0;
   }
 
   groundTo(groundY) {
@@ -65,7 +79,44 @@ class Mario {
   }
 
   draw() {
-    this.ctx.fillRect(this.x, this.y, this.w, this.h);
+    if (this.sprite.isReady) {
+      this.ctx.drawImage(
+        this.sprite,
+        this.sprite.vFrameIndex * this.sprite.frameW,
+        this.sprite.hFrameIndex * this.sprite.frameH,
+        this.sprite.frameW,
+        this.sprite.frameH,
+        this.x,
+        this.y,
+        this.w,
+        this.h
+      );
+
+      this.animate();
+      this.drawCount++;
+    }
+  }
+
+  animate() {
+    if (this.isJumping) {
+      this.sprite.hFrameIndex = 0;
+      this.sprite.vFrameIndex = 0;
+    } else if (this.vx !== 0) {
+      this.animateFrame(1, 0, 2, 5);
+    } else {
+      this.sprite.hFrameIndex = 1;
+      this.sprite.vFrameIndex = 0;
+    }
+  }
+
+  animateFrame(initialHFrame, initialVFrame, frames, frequency) {
+    if (this.sprite.hFrameIndex !== initialHFrame) {
+      this.sprite.hFrameIndex = initialHFrame;
+      this.sprite.vFrameIndex = initialVFrame;
+    } else if (this.drawCount % frequency === 0) {
+      this.drawCount = 0;
+      this.sprite.vFrameIndex = (this.sprite.vFrameIndex + 1) % frames;
+    }
   }
 
 }
