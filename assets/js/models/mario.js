@@ -56,8 +56,8 @@ class Mario {
     this.x += this.vx;
     this.y += this.vy;
 
-    if (this.y > this.ground) {
-      this.y = this.ground;
+    if (this.y + this.h > this.ground) {
+      this.groundTo(this.ground);
       this.vy = 0;
       this.ay = 0;
       this.isJumping = false;

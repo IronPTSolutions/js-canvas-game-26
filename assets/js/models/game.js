@@ -7,7 +7,9 @@ class Game {
     this.ctx = this.canvas.getContext('2d');
 
     this.mario = new Mario(this.ctx, 150, 150);
-    this.mario.groundTo(this.canvas.height - 100);
+    this.mario.groundTo(this.canvas.height - BG_FLOOR);
+
+    this.background = new Background(this.ctx);
 
     this.fps = FPS;
     this.drawIntervalId = undefined;
@@ -39,6 +41,7 @@ class Game {
   }
 
   move() {
+    //this.background.move();
     this.mario.move();
 
     this.checkBounds();
@@ -54,6 +57,7 @@ class Game {
   }
 
   draw() {
+    this.background.draw();
     this.mario.draw();
   }
 

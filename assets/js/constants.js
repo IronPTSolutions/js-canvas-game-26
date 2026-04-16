@@ -7,6 +7,11 @@ const KEY_RIGHT = 39;
 const KEY_LEFT = 37;
 const KEY_UP = 38;
 
-const MARIO_VX = 3;
+const MARIO_VX = 5;
 const MARIO_VY = 10;
 const MARIO_AY = 0.3;
+
+const BG_VX = 3;
+
+const BG_MAIN = '/assets/images/bgs/bg-game.png';
+const BG_FLOOR = 55;
