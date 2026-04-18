@@ -17,3 +17,11 @@ const BG_VX = 3;
 
 const BG_MAIN = '/assets/images/bgs/bg-game.png';
 const BG_FLOOR = 55;
+
+const COIN_SPRITE = '/assets/images/sprites/sprite-coin.png';
+const COIN_W = 12 * 2;
+const COIN_H = 16 * 2;
+const COIN_SCORE = 5;
+const COIN_ANIMATION_FREQ = 10;
+const COIN_VX = BG_VX;
+const MAX_IN_GAME_COINS = 5;

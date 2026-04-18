@@ -11,6 +11,13 @@ class Game {
 
     this.background = new Background(this.ctx);
 
+    this.coins = [
+      new Coin(this.ctx, this.canvas.width + 700, this.canvas.height - 150),
+    ];
+    this.coinTimeoutId = undefined;
+
+    this.score = 0;
+
     this.fps = FPS;
     this.drawIntervalId = undefined;
   }
@@ -18,10 +25,13 @@ class Game {
   start() {
     if (!this.drawIntervalId) {
       this.setupListeners();
+
       this.drawIntervalId = setInterval(() => {
         this.clear();
         this.move();
         this.draw();
+        this.checkCollisions();
+        this.generateElements();
       }, this.fps)
     }
   }
@@ -42,6 +52,8 @@ class Game {
 
   move() {
     //this.background.move();
+    //this.coins.forEach((coin) => coin.move());
+
     this.mario.move();
 
     this.checkBounds();
@@ -54,11 +66,35 @@ class Game {
     if (this.mario.x + this.mario.w > this.canvas.width) {
       this.mario.x = this.canvas.width - this.mario.w;
     }
+
+    this.coins = this.coins.filter((coin) => !(coin.x + coin.w < 0))
+  }
+
+  checkCollisions() {
+    this.coins = this.coins.filter((coin) => {
+      if (this.mario.collidesWith(coin)) {
+        this.score += coin.score;
+        return false;
+      } else {
+        return true;
+      }
+    });
   }
 
   draw() {
     this.background.draw();
     this.mario.draw();
+    this.coins.forEach((coin) => coin.draw());
+  }
+
+  generateElements() {
+    if (!this.coinTimeoutId && this.coins.length < MAX_IN_GAME_COINS) {
+      this.coinTimeoutId = setTimeout(() => {
+        this.coins.push(new Coin(this.ctx, Math.random() * this.canvas.width, Math.random() * this.canvas.height));
+        this.coinTimeoutId = undefined;
+      }, Math.floor(Math.random() * 10) * 1000)
+    }
   }
 
 }
+
