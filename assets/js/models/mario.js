@@ -16,17 +16,33 @@ class Mario {
 
     this.isJumping = false;
 
-    this.sprite = new Image();
-    this.sprite.src = '/assets/images/sprites/sprite-mario.png';
-    this.sprite.vFrames = 2;
-    this.sprite.hFrames = 2;
-    this.sprite.vFrameIndex = 0;
-    this.sprite.hFrameIndex = 1;
-    this.sprite.onload = () => {
-      this.sprite.isReady = true;
-      this.sprite.frameW = Math.floor(this.sprite.width / this.sprite.vFrames);
-      this.sprite.frameH = Math.floor(this.sprite.height / this.sprite.hFrames);
+    this.sprite = undefined;
+
+    this.spriteRight = new Image();
+    this.spriteRight.src = '/assets/images/sprites/mario/sprite-right-mario.png';
+    this.spriteRight.vFrames = 2;
+    this.spriteRight.hFrames = 2;
+    this.spriteRight.vFrameIndex = 0;
+    this.spriteRight.hFrameIndex = 1;
+    this.spriteRight.onload = () => {
+      this.spriteRight.isReady = true;
+      this.spriteRight.frameW = Math.floor(this.spriteRight.width / this.spriteRight.vFrames);
+      this.spriteRight.frameH = Math.floor(this.spriteRight.height / this.spriteRight.hFrames);
     }
+
+    this.spriteLeft = new Image();
+    this.spriteLeft.src = '/assets/images/sprites/mario/sprite-left-mario.png';
+    this.spriteLeft.vFrames = 2;
+    this.spriteLeft.hFrames = 2;
+    this.spriteLeft.vFrameIndex = 0;
+    this.spriteLeft.hFrameIndex = 1;
+    this.spriteLeft.onload = () => {
+      this.spriteLeft.isReady = true;
+      this.spriteLeft.frameW = Math.floor(this.spriteLeft.width / this.spriteLeft.vFrames);
+      this.spriteLeft.frameH = Math.floor(this.spriteLeft.height / this.spriteLeft.hFrames);
+    }
+
+    this.sprite = this.spriteRight;
 
     this.drawCount = 0;
   }
@@ -41,7 +57,7 @@ class Mario {
     switch(event.keyCode) {
       case KEY_RIGHT:
         if (isPressed) {
-          console.debug(event);
+          this.sprite = this.spriteRight;
           this.vx = MARIO_VX;
         } else {
           this.vx = 0;
@@ -49,6 +65,7 @@ class Mario {
         break;
       case KEY_LEFT:
         if (isPressed) {
+          this.sprite = this.spriteLeft;
           this.vx = -MARIO_VX;
         } else {
           this.vx = 0;
