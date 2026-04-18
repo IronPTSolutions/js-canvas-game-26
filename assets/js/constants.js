@@ -25,3 +25,13 @@ const COIN_SCORE = 5;
 const COIN_ANIMATION_FREQ = 10;
 const COIN_VX = BG_VX;
 const MAX_IN_GAME_COINS = 5;
+
+const ENEMY_ANIMATION_FREQ = 10;
+const ENEMY_VX = MARIO_VX - 3;
+
+const BOWSER_WITH = 34 * 2;
+const BOWSER_HEIGHT = 41 * 2;
+const BOWSER_SPRITE = '/assets/images/sprites/enemies/bowser/sprite-left-bowser.png';
+const BOWSER_SPRITE_VF = 4;
+const BOWSER_SPRITE_HF = 1;
+const BOWSER_SCORE = 50;

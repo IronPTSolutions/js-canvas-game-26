@@ -1,22 +1,27 @@
 class Game {
 
-  constructor(canvasId) {
+  constructor(canvasId, scoreContainerId) {
     this.canvas = document.getElementById(canvasId);
     this.canvas.width = CANVAS_W;
     this.canvas.height = CANVAS_H;
     this.ctx = this.canvas.getContext('2d');
+
+    this.scoreContainerId = scoreContainerId;
 
     this.mario = new Mario(this.ctx, 150, 150);
     this.mario.groundTo(this.canvas.height - BG_FLOOR);
 
     this.background = new Background(this.ctx);
 
-    this.coins = [
-      new Coin(this.ctx, this.canvas.width + 700, this.canvas.height - 150),
-    ];
+    this.coins = [];
     this.coinTimeoutId = undefined;
 
+    this.enemies = [];
+    this.enemyTimeoutId = undefined;
+
     this.score = 0;
+
+    this.hearts = 2;
 
     this.fps = FPS;
     this.drawIntervalId = undefined;
@@ -32,6 +37,8 @@ class Game {
         this.draw();
         this.checkCollisions();
         this.generateElements();
+        this.checkGameOver();
+        this.updateMarkers();
       }, this.fps)
     }
   }
@@ -55,6 +62,7 @@ class Game {
     //this.coins.forEach((coin) => coin.move());
 
     this.mario.move();
+    this.enemies.forEach((enemy) => enemy.move());
 
     this.checkBounds();
   }
@@ -79,12 +87,26 @@ class Game {
         return true;
       }
     });
+
+    this.enemies = this.enemies.filter((enemy) => {
+      if (this.mario.collidesWith(enemy)) {
+        if (this.mario.y < enemy.y && this.mario.isJumping) {
+          this.score += enemy.score;
+        } else {
+          this.hearts--;
+        }
+        return false;
+      } else {
+        return true;
+      }
+    })
   }
 
   draw() {
     this.background.draw();
     this.mario.draw();
     this.coins.forEach((coin) => coin.draw());
+    this.enemies.forEach((enemy) => enemy.draw());
   }
 
   generateElements() {
@@ -93,6 +115,38 @@ class Game {
         this.coins.push(new Coin(this.ctx, Math.random() * this.canvas.width, Math.random() * this.canvas.height));
         this.coinTimeoutId = undefined;
       }, Math.floor(Math.random() * 10) * 1000)
+    }
+
+    if (!this.enemyTimeoutId) {
+      this.enemyTimeoutId = setTimeout(() => {
+        this.enemies.push(
+          Enemy.createBowser(
+            this.ctx,
+            this.canvas.width + 100,
+            this.canvas.height - BG_FLOOR - BOWSER_HEIGHT
+          )
+        );
+        this.enemyTimeoutId = undefined;
+      }, Math.floor(Math.random() * 5) * 1000)
+    }
+  }
+
+  checkGameOver() {
+    if (this.hearts <= 0) {
+      this.stop();
+    }
+  }
+
+  updateMarkers() {
+    this.ctx.save();
+    this.ctx.font = "40px serif";
+    this.ctx.fillStyle = "red";
+    this.ctx.fillText(this.score, 100, 100);
+    this.ctx.restore();
+
+    const scoreContainer = document.getElementById(this.scoreContainerId);
+    if (scoreContainer) {
+      scoreContainer.innerText = this.score;
     }
   }
 
